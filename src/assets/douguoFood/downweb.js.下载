@@ -1,0 +1,52 @@
+$(function(){
+	var winHeight = $(window).height();
+	var winWidth = $(window).width();
+	var down = $.cookie('gaDown');
+    if (typeof down == 'undefined' || down != 1) {
+    	// 1478601029 旧版开屏 ； 1493172104 直播开屏
+        var _doc = '<div id="show" style="position:fixed;top:0;left:0;background:rgba(0,0,0,.1);overflow: hidden;z-index: 9998"><a href="http://www.douguo.com/page/download/" target="_blank" class="aclick" style="display:block;width:960px;height:540px;position:absolute;top:50%;left:50%;margin-top:-230px;margin-left:-480px;background-image: url(http://i1.douguo.net/upload/banner/1493793935.png);background-size:100% 100%;z-index:9998"></a><div class="kclose" style="position:absolute;top:50%;left:50%;font-size:12px;margin-top:-150px;margin-left:417px;background:rgba(255,255,255,.7);padding:2px 6px;border-radius:6px;color: #353432;z-index:9999;">跳过<span id="sec" style="color:#fe641e;margin-left:4px">5</span><span style="color:#fe641e">s</span></div></div>';
+	$(document.body).append(_doc);
+	$("#show").css({"height":winHeight,"width":winWidth});
+	if (winWidth < 960) {
+		$(".aclick").css({"height":0.5625 * winWidth,"width":winWidth,"margin-left":-(winWidth/2)});
+		$(".kclose").css({"margin-left":(winWidth/2)-80});
+	}
+
+	$(window).resize(function(){
+    	var winHeight2 = $(window).height();
+		var winWidth2 = $(window).width();
+		$("#show").css({"height":winHeight2,"width":winWidth2});
+		if (winWidth2 < 960) {
+			$(".aclick").css({"height":0.5625 * winWidth2,"width":winWidth2,"margin-left":-(winWidth2/2)});
+			$(".kclose").css({"margin-left":(winWidth2/2)-80});
+		}
+    })
+    $('.kclose').on('click',function(){
+		closeDownload();
+    })
+	function closeDownload () {
+		$("#show").remove();
+		var expireDate = new Date();
+		expireDate.setTime( expireDate.getTime() + ( 24 * 60 * 60 * 1000 ) );
+		$.cookie("gaDown","1",{path:"/",expires:expireDate});
+	}
+    if ($('#sec').size()) {
+		setInterval(function(){
+		var $sec = $('#sec');
+		var left_sec = parseInt($sec.text());
+		if (isNaN(left_sec) || left_sec <= 0) {
+			closeDownload();
+		} else{
+			$(sec).html(left_sec - 1);
+		}
+		},1000);
+	} else {
+		setTimeout(function () {
+			closeDownload();
+		},1000);
+	}
+    }
+
+
+});
+			
