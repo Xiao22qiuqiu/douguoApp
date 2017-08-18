@@ -1,79 +1,85 @@
 <template>
   <div class="home">
-    <!-- <mt-header fixed title="搜索">
-      <mt-button class="iconfont icon-all" slot="left"></mt-button>
-      <mt-button class="iconfont icon-add" slot="right"></mt-button>
-      <mt-button class="iconfont icon-xiaoxizhongxin" slot="right"></mt-button>
-      <mt-button></mt-button>
-    </mt-header> -->
     <div class="header">
       <div class="btn">
         <span class="iconfont icon-all"></span>
-        <span><input type="text" class="search" placeholder="搜索"></span>
+        <span><input type="text" class="search"  placeholder="搜索"></span>
         <span class="iconfont icon-add"></span>
         <span class="iconfont icon-xiaoxizhongxin"></span>
       </div>
+      <!-- 切换 -->
       <div class="tab">
-        <router-link to="/recommend" >推 荐</router-link>
-        <router-link to="">关 注</router-link>
+        <mu-tabs :value="activeTab" @change="handleTabChange">
+          <mu-tab value="tab1" title="推 荐"/>
+          <mu-tab value="tab2" title="关 注"/>
+        </mu-tabs>
+      </div>
+      <!-- 切换 -->
+    </div>
+    <!-- 切换的内容 -->
+    <div class="tabcontent">
+      <div v-if="activeTab === 'tab1'">
+        <!-- 轮播图 -->
+         <div class="carousel">
+           <mt-swipe :auto="4000" style="width:100%;height:190px;">
+             <mt-swipe-item ><router-link to="/" ><img src="../../assets/homeImg/foodShow3.jpg" alt="" class="imgSize"></router-link></mt-swipe-item>
+             <mt-swipe-item ><router-link to="/" ><img src="../../assets/homeImg/foodShow2.jpg" alt="" class="imgSize"></router-link></mt-swipe-item>
+             <mt-swipe-item ><router-link to="/" ><img src="../../assets/homeImg/foodShow7.jpg" alt="" class="imgSize"></router-link></mt-swipe-item>
+             <mt-swipe-item ><router-link to="/" ><img src="../../assets/homeImg/foodShow4.jpg" alt="" class="imgSize"></router-link></mt-swipe-item>
+             <mt-swipe-item ><router-link to="/" ><img src="../../assets/homeImg/foodShow5.jpg" alt="" class="imgSize"></router-link></mt-swipe-item>
+           </mt-swipe>
+         </div>
+        <!-- 轮播图 -->
+        <div class="gridlist-demo-container">
+          <mu-grid-list class="gridlist-inline-demo">
+            <mu-grid-tile v-for="tile, index in list" :key="index">
+              <img :src="tile.image">
+              <span slot="title">{{tile.title}}</span>
+              <span slot="subTitle">by <b>{{tile.author}}</b></span>
+              <mu-icon-button icon="" slot="action"/></mu-icon-button>  
+            </mu-grid-tile>
+          </mu-grid-list>
+        </div>
+        <div class="todayShow">今日午餐</div>
+      </div>
+      <div v-if="activeTab === 'tab2'">
+        <h2>Tab Two</h2>
+        <p>
+           这是第二个 tab
+        </p>
       </div>
     </div>
-    <div class="carousel">
-      <mt-swipe :auto="4000" style="width:100%;height:190px;">
-        <mt-swipe-item ><router-link to="/" ><img src="../../assets/homeImg/foodShow3.jpg" alt="" style="width:100%;height:auto;"></router-link></mt-swipe-item>
-        <mt-swipe-item ><router-link to="/" ><img src="../../assets/homeImg/foodShow2.jpg" alt="" style="width:100%;height:auto;"></router-link></mt-swipe-item>
-        <mt-swipe-item ><router-link to="/" ><img src="../../assets/homeImg/foodShow7.jpg" alt="" style="width:100%;height:auto;"></router-link></mt-swipe-item>
-        <mt-swipe-item ><router-link to="/" ><img src="../../assets/homeImg/foodShow4.jpg" alt="" style="width:100%;height:auto;"></router-link></mt-swipe-item>
-        <mt-swipe-item ><router-link to="/" ><img src="../../assets/homeImg/foodShow5.jpg" alt="" style="width:100%;height:auto;"></router-link></mt-swipe-item>
-      </mt-swipe>
-    </div>
   </div>
- <!--  <div class="carousel2">   
-  </div>
-  <div id="lazyContainer">
-    <ul>
-      <li v-for="item in list">
-        <img v-lazy.lazyContainer="item">
-      </li>
-    </ul> 
-  </div> -->
+
 </template>
 
 <script>
 export default {
+  data () {
+    return {
+      activeTab: 'tab1',
+      list: ''
+    }
+  },
+  methods: {
+    handleTabChange (val) {
+      this.activeTab = val
+    }
+  },
+  created () {
+    // GET /someUrl
+    this.$http.get('../../static/Json/homeJson/homeList.json').then(response => {
+    // get body data
+      this.list = response.body.list
+      console.log(this.list)
+    }, response => {
+  // error callback
+    })
+  }
 }
 </script>
 
 <style scoped>
-/*.mint-header{
-  height: 3.5rem;
-  background-color: #fff;
-  color: #999;
-  border-bottom: 0.014rem solid #ddd;
-}
-.mint-searchbar{
-  height: 3rem;
-  line-height: 3rem;
-  border: 0.014rem solid #ddd;
-  border-radius: 9px;
-}
-.iconfont{
-  font-size: 1.5rem;
-  background-color:rgba(1,86,179);
-  color: #000;
-  margin-right: 0.7rem;
-}
-.mint-button .search{
-  width: 50px;
-  height: 20px;
-  border: 1px solid #999;
-  align-items:center;
-}
-.mint-header-title{
-  border: 1px solid;
-  line-height: 1.6;
-  background-color: rgb(163,163,163);
-}*/
 .home .header{
   width: 100%;
   height: 6rem;
@@ -101,6 +107,7 @@ export default {
   align-items:center;
   height: 3rem;
 }
+/*选项卡*/
 .home .tab{
   line-height:3rem;
   align-items:center;
@@ -112,9 +119,55 @@ export default {
 .home a :after{
   color: #000;
 }
-.carousel{
+/*轮播*/
+.tabcontent{
   /*position: absolute;*/
   z-index: -1;
   margin: 7.5rem 1.5rem;
+  /*overflow: hidden;*/
+}
+/*.tabcontennt::-webkit-scrollbar {
+  display: none;
+}*/
+.imgSize{
+  width:100%;
+  height:auto;
+}
+/*选项卡*/
+.mu-tab-link{
+  color:rgba(163,163,163,0.9);
+  width: 30px;
+}
+.mu-tabs{
+  background-color: #fff;
+  color: #000;
+}
+.mu-tab-active{
+  color: #000;
+}
+.mu-circle-ripple, .mu-ripple-wrapper{
+  height: 100%;
+  width: 100%;
+}
+/*GridList*/
+.gridlist-demo-container{
+  margin-top: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-bottom: 1.5rem;
+}
+
+.gridlist-inline-demo{
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+/*今日热图*/
+.todayShow{
+  width: 70%;
+  height: 3rem;
+  border: 1px solid #ddd;
+  margin: auto;
 }
 </style>

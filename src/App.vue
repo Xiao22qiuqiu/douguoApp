@@ -44,4 +44,7 @@ body{
 .mint-swipe-indicator.is-active {
   background: #fff;
 }
+.mu-tab-link-highlight{
+  background-color:rgba(163,163,163,1);
+}
 </style>

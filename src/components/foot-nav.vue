@@ -1,7 +1,7 @@
 <template>
     <div class="foot-nav-containner">
         <ul class="bottom-nav">
-            <router-link to="/" class="iconfont icon-shouye"><span></span></router-link>
+            <router-link to="/" class="iconfont icon-shouye" title="shouye"></router-link>
             <router-link to="/recommend" class="iconfont icon-wodedingdan"></router-link>
             <router-link to="/shoppingCart" class="iconfont icon-gouwuche"></router-link>
             <router-link to="/personalHomepage" class="iconfont icon-account"></router-link>
